@@ -17,26 +17,24 @@ class App extends StatelessWidget {
       title: "News Cards",
       home: Splash(),
       routes: {
-        "/home": (context)=>  Home(),
+        "/home": (context) => Home(),
         "/register": (context) => Register(),
         "/fav": (context) => Fav(),
         "/login": (context) => Login()
       },
       theme: ThemeData(
+          fontFamily: 'VisueltPro',
           accentColor: Colors.pinkAccent,
           appBarTheme: AppBarTheme(color: Colors.pinkAccent),
-          buttonColor: Colors.pinkAccent[200], 
-          cardTheme: CardTheme(
-            elevation: 10
-          )
-          ),
+          buttonColor: Colors.pinkAccent[200],
+          cardTheme: CardTheme(elevation: 10)
+      ),
       darkTheme: ThemeData(
+        fontFamily: 'VisueltPro',
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Color.fromRGBO(51, 51, 51, 1),
-        cardTheme: CardTheme(
-            color: Color.fromRGBO(51, 51, 51, 1),
-            elevation: 10
-        ),
+        scaffoldBackgroundColor: Color.fromRGBO(23, 34, 80, 1),
+        cardTheme:
+            CardTheme(color: Color.fromRGBO(18, 47, 80, 1), elevation: 10),
       ),
     );
   }

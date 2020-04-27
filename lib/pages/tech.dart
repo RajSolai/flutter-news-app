@@ -60,78 +60,122 @@ class _TechState extends State<Tech> {
     if (news == null) {
       return Center(child: Text("Loading"));
     } else {
-      return ListView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
-          itemCount: news == null ? 0 : news.length,
-          itemBuilder: (BuildContext context, int index) {
-            var urlToImage = news[index]["urlToImage"];
-            return Container(
-                padding: EdgeInsets.all(10),
-                width: double.maxFinite,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    children: <Widget>[
-                      ClipRRect(
-                        child: Image.network(noImg(urlToImage)),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)
-                        )
+      return Container(
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 20,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 40),
+                  height: 40,
+                  width: 40,
+                  child: CircleAvatar(
+                      child: ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Image(
+                      image: AssetImage(
+                        "./assets/doggoavatar.png",
                       ),
-                      Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            news[index]["title"],
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.bold),
-                          )),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          stringNuller(news[index]["content"]),
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: <Widget>[
-                            ButtonTheme(
-                              height: 40,
-                              minWidth: 170,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: RaisedButton(
-                                color: Colors.pinkAccent[200],
-                                child: Text(
-                                  "Read Full Article",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => InappBrowserpage(
-                                          newsData: news[index],
-                                        ),
-                                      ));
-                                },
-                              ),
-                            ),
-                            Spacer(flex: 2),
-                            IconButton(
-                                icon: Icon(Icons.share),
-                                onPressed: () =>
-                                    Share.share(news[index]["url"])),
-                          ],
-                        ),
-                      )
-                    ],
+                    ),
+                  )),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 40, bottom: 0),
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "Tech 👩🏻‍💻",
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
-                ));
-          });
+                ),
+              ],
+            ),
+            Container(
+              child: Expanded(
+                  child: ListView.builder(
+                      padding: EdgeInsets.all(0),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: news == null ? 0 : news.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var urlToImage = news[index]["urlToImage"];
+                        return Container(
+                            padding: EdgeInsets.all(10),
+                            width: double.maxFinite,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Column(
+                                children: <Widget>[
+                                  ClipRRect(
+                                      child: Image.network(noImg(urlToImage)),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20),
+                                          topRight: Radius.circular(20))),
+                                  Container(
+                                      padding: EdgeInsets.all(10),
+                                      child: Text(
+                                        news[index]["title"],
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold),
+                                      )),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Text(
+                                      stringNuller(news[index]["content"]),
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Row(
+                                      children: <Widget>[
+                                        ButtonTheme(
+                                          height: 40,
+                                          minWidth: 170,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8)),
+                                          child: RaisedButton(
+                                            color: Colors.pinkAccent[200],
+                                            child: Text(
+                                              "Read Full Article",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InappBrowserpage(
+                                                      newsData: news[index],
+                                                    ),
+                                                  ));
+                                            },
+                                          ),
+                                        ),
+                                        Spacer(flex: 2),
+                                        IconButton(
+                                            icon: Icon(Icons.share),
+                                            onPressed: () => Share.share(
+                                                news[index]["url"])),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ));
+                      })),
+            )
+          ],
+        ),
+      );
     }
   }
 }

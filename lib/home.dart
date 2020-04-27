@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
     )
   ];
 
-  var _index =0;
+  var _index = 0;
 
   _getData() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -42,20 +42,6 @@ class _HomeState extends State<Home> {
     });
   }
 
- /*  _signOut() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    var fireauth = FirebaseAuth.instance;
-    fireauth.signOut();
-    _prefs.clear();
-  }
-
-
-  _deleteAccount() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-  }
-  */
-
 
   @override
   void initState() {
@@ -65,107 +51,55 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-        return Scaffold(
-              appBar: AppBar(
-                    elevation: 0,
-                    title: Text("News Cards")
+    return Scaffold(
+      body: _screens[_index],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.shifting,
+        backgroundColor: Colors.transparent,
+        currentIndex: _index,
+        items: [
+          BottomNavigationBarItem(
+              title: Text(
+                "Home",
+                style: TextStyle(color: Colors.pinkAccent[100]),
               ),
-              body: _screens[_index],
-              drawer: Drawer(
-                child: ListView(
-                  children: <Widget>[
-                    Container(
-                      height: 208,
-                        child: DrawerHeader(
-                        child: ListView(
-                      children: <Widget>[
-                        Text("Hello !"),
-                        Container(
-                          padding: EdgeInsets.all(15),
-                        ),
-                        Container(
-                          height: 70,
-                          width: 70,
-                          margin: EdgeInsets.only(right: 208),
-                          child: CircleAvatar(
-                              child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
-                            child: Image(
-                              image: AssetImage(
-                                "./assets/doggoavatar.png",
-                              ),
-                            ),
-                          )),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: Text(
-                            uname != null ? uname : "No Data",
-                            style: TextStyle(
-                                fontSize: 48, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ))),
-                    ListTile(
-                      title: Text("Favorites"),
-                      onTap: () => Navigator.pushNamed(context, "/fav"),
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Sign Out",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      onTap: null,
-                    ),
-                    ListTile(
-                      title: Text(
-                        "Delete Account",
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      onTap: null,
-                    )
-                  ],
-                ),
-              ), 
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: _index ,
-            items: [
-              BottomNavigationBarItem(
-                title: Text("Home",style: TextStyle(color: Colors.pinkAccent[100]),),
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.pinkAccent,                  
-                )
-              ),
-              BottomNavigationBarItem(
-                title: Text("Tech",style: TextStyle(color: Colors.pinkAccent[100]),),
-                icon: Icon(
-                  Icons.computer,
-                  color: Colors.pinkAccent,
-                ),
-              ),
-              BottomNavigationBarItem(
-                title: Text("Movies",style: TextStyle(color: Colors.pinkAccent[100]),),
-                icon: Icon(
-                  Icons.video_library,
-                  color: Colors.pinkAccent,
-                )
-              ),
-              BottomNavigationBarItem(
-                title: Text("Science",style: TextStyle(color: Colors.pinkAccent[100])),
-                icon: Icon(
-                  Icons.school,
-                  color: Colors.pinkAccent,
-                )
-              )
-            ],
-            onTap: (index){
-              setState(() {
-                _index = index;
-              });
-            },
+              icon: Icon(
+                Icons.home,
+                color: Colors.pinkAccent,
+              )),
+          BottomNavigationBarItem(
+            title: Text(
+              "Tech",
+              style: TextStyle(color: Colors.pinkAccent[100]),
+            ),
+            icon: Icon(
+              Icons.computer,
+              color: Colors.pinkAccent,
+            ),
           ),
-        );
+          BottomNavigationBarItem(
+              title: Text(
+                "Movies",
+                style: TextStyle(color: Colors.pinkAccent[100]),
+              ),
+              icon: Icon(
+                Icons.video_library,
+                color: Colors.pinkAccent,
+              )),
+          BottomNavigationBarItem(
+              title: Text("Science",
+                  style: TextStyle(color: Colors.pinkAccent[100])),
+              icon: Icon(
+                Icons.school,
+                color: Colors.pinkAccent,
+              ))
+        ],
+        onTap: (index) {
+          setState(() {
+            _index = index;
+          });
+        },
+      ),
+    );
   }
 }
