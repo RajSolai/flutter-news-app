@@ -1,5 +1,5 @@
 import 'package:NewsApp/pages/tech.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import "package:flutter/material.dart";
 import './pages/entertainment.dart';
 import './pages/science.dart';
@@ -63,35 +63,36 @@ class _HomeState extends State<Home> {
                 "Home",
                 style: TextStyle(color: Colors.pinkAccent[100]),
               ),
-              icon: Icon(
-                Icons.home,
-                color: Colors.pinkAccent,
+              icon: FaIcon(
+                FontAwesomeIcons.fire,
+                color: Colors.pink[300],
               )),
           BottomNavigationBarItem(
             title: Text(
               "Tech",
               style: TextStyle(color: Colors.pinkAccent[100]),
             ),
-            icon: Icon(
-              Icons.computer,
-              color: Colors.pinkAccent,
-            ),
+            icon: FaIcon(
+                FontAwesomeIcons.mobile,
+                color: Colors.pink[300],
+              )
           ),
           BottomNavigationBarItem(
               title: Text(
                 "Movies",
                 style: TextStyle(color: Colors.pinkAccent[100]),
               ),
-              icon: Icon(
-                Icons.video_library,
-                color: Colors.pinkAccent,
-              )),
+              icon: FaIcon(
+                FontAwesomeIcons.video,
+                color: Colors.pink[300],
+              ) 
+              ),
           BottomNavigationBarItem(
-              title: Text("Science",
+              title: Text("Health",
                   style: TextStyle(color: Colors.pinkAccent[100])),
-              icon: Icon(
-                Icons.school,
-                color: Colors.pinkAccent,
+              icon: FaIcon(
+                FontAwesomeIcons.heartbeat,
+                color: Colors.pink[300],
               ))
         ],
         onTap: (index) {

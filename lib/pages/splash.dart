@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity/connectivity.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -10,6 +10,7 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   String uid;
+  bool connection = true;
 
   _navigator() async {
     await Future.delayed(Duration(seconds: 3));
@@ -23,36 +24,85 @@ class _SplashState extends State<Splash> {
     }
   }
 
+  _checkConnection() async {
+    var res = await Connectivity().checkConnectivity();
+    if (res == ConnectivityResult.none) {
+      setState(() {
+        connection = false;
+      });
+    } else {
+      _navigator();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    _navigator();
+    _checkConnection();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-        child: Scaffold(
-     // backgroundColor: Colors.pinkAccent[200],
-      body: Container(
-        padding: EdgeInsets.only(top: 400),
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              Text(
-                "News Cards",
-                style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 200,
-              ),
-              CircularProgressIndicator()
-            ],
+    if (connection) {
+      return Material(
+          child: Scaffold(
+        // backgroundColor: Colors.pinkAccent[200],
+        body: Container(
+          padding: EdgeInsets.only(top: 400),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "News Cards",
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 200,
+                ),
+                CircularProgressIndicator()
+              ],
+            ),
           ),
         ),
-      ),
-    ));
+      ));
+    } else {
+      return Material(
+        child: Scaffold(
+          body: SingleChildScrollView(
+              child: Container(
+            margin: EdgeInsets.only(top: 300),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 200,
+                  width: 200,
+                  child: Center(
+                    child: Image.asset("./assets/icons/no-connection-logo.png"),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    "Lost Connection 😴",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Center(
+                  child: Text(
+                    "Try Restarting the App !",
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w100,
+                        fontStyle: FontStyle.italic),
+                  ),
+                )
+              ],
+            ),
+          )),
+        ),
+      );
+    }
   }
 }

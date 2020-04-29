@@ -1,9 +1,10 @@
 import 'dart:convert';
-import '../services/Article.dart';
+import 'package:NewsApp/pages/account.dart';
 import "package:flutter/material.dart";
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 
 class Tech extends StatefulWidget {
   @override
@@ -54,11 +55,35 @@ class _TechState extends State<Tech> {
     }
   }
 
-  // build / render the widget
+  // build the widget
   @override
   Widget build(BuildContext context) {
     if (news == null) {
-      return Center(child: Text("Loading"));
+      return SingleChildScrollView(
+          child: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 100,
+              width: 100,
+              child: Image.asset("./assets/icons/loading-logo.png"),
+            ),
+            Center(
+              child: Text(
+                "Fetching your News!",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: 10),
+            Center(
+              child: Text(
+                "This might take a second",
+                style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+              ),
+            )
+          ],
+        ),
+      ));
     } else {
       return Container(
         child: Column(
@@ -69,19 +94,26 @@ class _TechState extends State<Tech> {
                   width: 20,
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 40),
-                  height: 40,
-                  width: 40,
-                  child: CircleAvatar(
-                      child: ClipRRect(
-                    borderRadius: BorderRadius.circular(50),
-                    child: Image(
-                      image: AssetImage(
-                        "./assets/doggoavatar.png",
-                      ),
-                    ),
-                  )),
-                ),
+                    margin: EdgeInsets.only(top: 40),
+                    height: 40,
+                    width: 40,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => Account()));
+                      },
+                      child: CircleAvatar(
+                          child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image(
+                          image: AssetImage(
+                            "./assets/doggoavatar.png",
+                          ),
+                        ),
+                      )),
+                    )),
                 SizedBox(
                   width: 5,
                 ),
@@ -98,11 +130,11 @@ class _TechState extends State<Tech> {
             Container(
               child: Expanded(
                   child: ListView.builder(
+                      scrollDirection: Axis.vertical,
                       padding: EdgeInsets.all(0),
-                      physics: const AlwaysScrollableScrollPhysics(),
+                      physics: AlwaysScrollableScrollPhysics(),
                       itemCount: news == null ? 0 : news.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var urlToImage = news[index]["urlToImage"];
                         return Container(
                             padding: EdgeInsets.all(10),
                             width: double.maxFinite,
@@ -112,7 +144,8 @@ class _TechState extends State<Tech> {
                               child: Column(
                                 children: <Widget>[
                                   ClipRRect(
-                                      child: Image.network(noImg(urlToImage)),
+                                      child: Image.network(
+                                          noImg(news[index]["urlToImage"])),
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(20),
                                           topRight: Radius.circular(20))),
@@ -148,16 +181,8 @@ class _TechState extends State<Tech> {
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        InappBrowserpage(
-                                                      newsData: news[index],
-                                                    ),
-                                                  ));
-                                            },
+                                            onPressed: () => urlLauncher
+                                                .launch(news[index]["url"]),
                                           ),
                                         ),
                                         Spacer(flex: 2),

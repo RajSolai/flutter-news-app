@@ -21,17 +21,26 @@ class InappBrowserpage extends StatelessWidget {
     }
   }
 
+  // class constructor
   InappBrowserpage({this.newsData});
+
+  // building the widgets
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        /*  appBar: AppBar(
-          title: Text("News Cards"),
-        ), */
         body: SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Image.network(newsData["urlToImage"]),
+          Stack(
+            children: <Widget>[
+              Positioned(
+                child: Icon(Icons.arrow_back_ios),
+              ),
+              Positioned(
+                child: Image.network(newsData["urlToImage"]),
+              )
+            ],
+          ),
           Container(
             child: null,
             height: 30,

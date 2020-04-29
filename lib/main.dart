@@ -32,9 +32,7 @@ class App extends StatelessWidget {
       darkTheme: ThemeData(
         fontFamily: 'VisueltPro',
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: Color.fromRGBO(23, 34, 80, 1),
-        cardTheme:
-            CardTheme(color: Color.fromRGBO(18, 47, 80, 1), elevation: 10),
+        cardTheme: CardTheme( elevation: 10),
       ),
     );
   }
