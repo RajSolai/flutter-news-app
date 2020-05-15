@@ -1,94 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart' as url_launcher;
+import 'package:webview_flutter/webview_flutter.dart';
 
-class InappBrowserpage extends StatelessWidget {
-  final newsData;
+class InappBrowserpage extends StatefulWidget {
+  final newsurl;
+  InappBrowserpage({this.newsurl});
 
-  // handle string null errors
-  String nullStr(str) {
-    if (str == null) {
-      return "Null";
-    } else {
-      return str;
-    }
+  @override
+  _InappBrowserpageState createState() => _InappBrowserpageState();
+}
+
+class _InappBrowserpageState extends State<InappBrowserpage> {
+  var _stackIndex = 1;
+
+  void _handleLoad(String value) {
+    setState(() {
+      _stackIndex = 0;
+    });
   }
 
-  _launchurl(data) async {
-    if (await url_launcher.canLaunch(data["url"])) {
-      url_launcher.launch(data["url"]);
-    } else {
-      print("cannot launch");
-    }
-  }
-
-  // class constructor
-  InappBrowserpage({this.newsData});
-
-  // building the widgets
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
+        body: Container(
       child: Column(
         children: <Widget>[
-          Stack(
-            children: <Widget>[
-              Positioned(
-                child: Icon(Icons.arrow_back_ios),
-              ),
-              Positioned(
-                child: Image.network(newsData["urlToImage"]),
-              )
-            ],
+          SizedBox(
+            height: 40,
           ),
           Container(
-            child: null,
-            height: 30,
-          ),
-          Container(child: null, height: 10),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Text(
-              newsData["title"],
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Container(
-            child: null,
-            height: 2,
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
+            child: Row(
               children: <Widget>[
+                SizedBox(
+                  width: 10,
+                ),
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
-                  child: null,
-                  height: 30,
-                ),
-                Text(
-                  nullStr(newsData["content"]),
-                  style: TextStyle(fontSize: 18),
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  child: null,
-                ),
-                ButtonTheme(
-                    height: 40,
-                    minWidth: 170,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    child: RaisedButton(
-                        color: Colors.pinkAccent[200],
-                        child: Text(
-                          "Read full article",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                        onPressed: () => _launchurl(newsData)))
+                  child: Text(
+                    'Article 📖',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                )
               ],
             ),
           ),
+          Expanded(
+              child: IndexedStack(
+            index: _stackIndex,
+            children: [
+              Column(
+                children: <Widget>[
+                  Expanded(
+                      child: WebView(
+                    javascriptMode: JavascriptMode.unrestricted,
+                    initialUrl: widget.newsurl,
+                    onPageFinished: _handleLoad,
+                  )),
+                ],
+              ),
+              Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ],
+          ))
         ],
       ),
     ));

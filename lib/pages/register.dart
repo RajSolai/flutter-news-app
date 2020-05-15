@@ -1,4 +1,5 @@
-import 'package:NewsApp/pages/login.dart';
+import 'package:NewsCards/pages/login.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,10 +16,27 @@ class _RegisterState extends State<Register> {
   String emailid;
   String password;
   String displayName;
+  String _gender = 'Select Gender';
+  String dp;
 
   Future _setdata(key, data) async {
     final _prefs = await SharedPreferences.getInstance();
     _prefs.setString(key, data);
+  }
+
+  _updateDp(String _dppref) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.setString('dpid', _dppref);
+    setState(() {
+      dp = _dppref;
+    });
+    if (_dppref == 'dog') {
+      setState(() {
+        _gender = 'Male';
+      });
+    }else{
+      _gender = 'Female';
+    }
   }
 
   void _signUp(email, pass, displayname) async {
@@ -34,7 +52,7 @@ class _RegisterState extends State<Register> {
             gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
       } else if (error.message ==
           "The email address is already in use by another account.") {
-        Toast.show(error.message+"🙅", context,
+        Toast.show(error.message + "🙅", context,
             gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
       } else {
         Toast.show("Cant Reach Servers 😴", context,
@@ -45,9 +63,17 @@ class _RegisterState extends State<Register> {
       // user update info
       UserUpdateInfo info = new UserUpdateInfo();
       info.displayName = displayname;
+      Firestore _db = Firestore.instance;
       res.user.updateProfile(info);
       _setdata("uid", res.user.uid);
       _setdata("username", displayname);
+      var data = {
+        'name' : displayName,
+        'email' : emailid,
+        'gender' : _gender,
+        'dp' : dp
+      };
+      _db.collection('AlluserDetails').document(email).setData(data);
       Toast.show("Cheers 🍷, your account is created", context,
           gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
       print("user created with email and password");
@@ -119,6 +145,7 @@ class _RegisterState extends State<Register> {
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextField(
+                              obscureText: true,
                               decoration: InputDecoration(
                                   hintText:
                                       'must contain atleast 6 characters'),
@@ -126,9 +153,50 @@ class _RegisterState extends State<Register> {
                                 setState(() {
                                   password = value;
                                 });
-                              })
+                              }),
+                          Container(
+                            padding: EdgeInsets.all(30),
+                            child: Text(_gender),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 90),
+                            child: Row(
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: ClipRRect(
+                                    child: Image.asset(
+                                      './assets/avatar/doggoavatar.png',
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(50)),
+                                  ),
+                                  onTap: () => _updateDp('dog'),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                GestureDetector(
+                                  child: ClipRRect(
+                                    child: Image.asset(
+                                      './assets/avatar/cat-icon.png',
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(50)),
+                                  ),
+                                  onTap: () => _updateDp('dog'),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Container(
                       padding: EdgeInsets.all(10),

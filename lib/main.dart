@@ -1,13 +1,16 @@
-import 'package:NewsApp/pages/fav.dart';
-import 'package:NewsApp/pages/login.dart';
-import 'package:NewsApp/pages/splash.dart';
+import 'package:NewsCards/pages/fav.dart';
+import 'package:NewsCards/pages/login.dart';
+import 'package:NewsCards/pages/splash.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 import 'pages/register.dart';
 import 'home.dart';
 
 main() {
+  Admob.initialize('ca-app-pub-7461368310551653~7736962283');
   runApp(App());
 }
+
 
 class App extends StatelessWidget {
   @override
@@ -25,14 +28,12 @@ class App extends StatelessWidget {
       theme: ThemeData(
           fontFamily: 'VisueltPro',
           accentColor: Colors.pinkAccent,
-          appBarTheme: AppBarTheme(color: Colors.pinkAccent),
-          buttonColor: Colors.pinkAccent[200],
-          cardTheme: CardTheme(elevation: 10)
-      ),
+          appBarTheme: AppBarTheme(color: Colors.pink),
+          cardTheme: CardTheme(elevation: 10)),
       darkTheme: ThemeData(
         fontFamily: 'VisueltPro',
         brightness: Brightness.dark,
-        cardTheme: CardTheme( elevation: 10),
+        cardTheme: CardTheme(elevation: 10),
       ),
     );
   }

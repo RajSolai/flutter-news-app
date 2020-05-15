@@ -1,6 +1,11 @@
+import 'package:NewsCards/pages/fav.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
+import 'package:NewsCards/services/dict.dart';
 
 class Account extends StatefulWidget {
   Account({Key key}) : super(key: key);
@@ -11,12 +16,39 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   String accountName;
+  String dp;
 
   _getAccount() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String temp = _prefs.getString("username");
+    String tempdp = _prefs.getString('dpid');
     setState(() {
       accountName = temp;
+      dp = tempdp;
+    });
+  }
+
+  _signOut() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    _auth.signOut().then((res) {
+      _prefs.remove("username");
+      _prefs.remove("uid");
+    });
+    Navigator.pushReplacementNamed(context, "/login").then((res) {
+      Toast.show('Sign Out Successfull 👍', context,
+          duration: Toast.LENGTH_LONG);
+    });
+  }
+
+  _deleteAccount() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.currentUser().then((user) {
+      user.delete();
+    });
+    Navigator.pushReplacementNamed(context, "/login").then((res) {
+      Toast.show('Account Deleted Successfully 👍', context,
+          duration: Toast.LENGTH_LONG);
     });
   }
 
@@ -64,41 +96,76 @@ class _AccountState extends State<Account> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 40, right: 180),
-              child: Text(
-                accountName == null ? "Name not Available" : accountName,
-                style: TextStyle(fontSize: 20),
+              margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 70,
+                  ),
+                  Container(
+                    child: Text(
+                      accountName == null ? "Name not Available" : accountName,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 40,
+                  ),
+                  Container(
+                    child: CircleAvatar(
+                        child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Image(
+                        image: AssetImage(
+                          dp == 'cat' ? dpDict[1] : dpDict[0],
+                        ),
+                      ),
+                    )),
+                  ),
+                ],
               ),
             ),
             Container(
-              padding: EdgeInsets.only(
-                left: 40,
-                right: 40
-              ),
-              margin: EdgeInsets.only(top: 40, right: 0),
+              padding: EdgeInsets.only(left: 40, right: 40),
+              margin: EdgeInsets.only(top: 30, right: 0),
               child: Text(
                 "\"Citizens in a democracy need diverse sources of news and information.\"",
-                style: TextStyle(fontSize: 16 , fontStyle: FontStyle.italic),
+                style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 90),
+              margin: EdgeInsets.only(top: 60),
               child: Column(
                 children: <Widget>[
                   CupertinoButton(
                       color: Colors.pink,
+                      child: Text("Favorites"),
+                      onPressed: () {
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (context) => Fav()));
+                      }),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  CupertinoButton(
+                      color: Colors.pink,
                       child: Text("Delete Account"),
-                      onPressed: () => print('hellp')),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      CupertinoButton(
+                      onPressed: () => _deleteAccount()),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  CupertinoButton(
                       color: Colors.pink,
                       child: Text("Sign Out"),
-                      onPressed: () => print('hellp'))
+                      onPressed: () => _signOut()),
+                  Container(
+                    child: AdmobBanner(
+                        adUnitId: 'ca-app-pub-7461368310551653/8304966164',
+                        adSize: AdmobBannerSize.BANNER),
+                  )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

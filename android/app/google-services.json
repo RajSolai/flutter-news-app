@@ -8,6 +8,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:999154849129:android:db300f2575133577a019f8",
+        "android_client_info": {
+          "package_name": "app.rajsolai085.fluttnewsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999154849129-ro20v02823jgvkjbqoriidgketqldgab.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUZ3SeQxII35eHS0i2Z18kvWcCrSW5jgs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999154849129-ro20v02823jgvkjbqoriidgketqldgab.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:999154849129:android:02ae3791282e2f7ea019f8",
         "android_client_info": {
           "package_name": "com.example.fluttnewsapp"

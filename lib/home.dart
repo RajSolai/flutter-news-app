@@ -1,4 +1,4 @@
-import 'package:NewsApp/pages/tech.dart';
+import 'package:NewsCards/pages/tech.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import "package:flutter/material.dart";
 import './pages/entertainment.dart';
@@ -42,7 +42,6 @@ class _HomeState extends State<Home> {
     });
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -68,15 +67,14 @@ class _HomeState extends State<Home> {
                 color: Colors.pink[300],
               )),
           BottomNavigationBarItem(
-            title: Text(
-              "Tech",
-              style: TextStyle(color: Colors.pinkAccent[100]),
-            ),
-            icon: FaIcon(
+              title: Text(
+                "Tech",
+                style: TextStyle(color: Colors.pinkAccent[100]),
+              ),
+              icon: FaIcon(
                 FontAwesomeIcons.mobile,
                 color: Colors.pink[300],
-              )
-          ),
+              )),
           BottomNavigationBarItem(
               title: Text(
                 "Movies",
@@ -85,15 +83,14 @@ class _HomeState extends State<Home> {
               icon: FaIcon(
                 FontAwesomeIcons.video,
                 color: Colors.pink[300],
-              ) 
-              ),
+              )),
           BottomNavigationBarItem(
               title: Text("Health",
                   style: TextStyle(color: Colors.pinkAccent[100])),
               icon: FaIcon(
                 FontAwesomeIcons.heartbeat,
                 color: Colors.pink[300],
-              ))
+              )),
         ],
         onTap: (index) {
           setState(() {

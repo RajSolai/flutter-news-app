@@ -1,10 +1,15 @@
 import 'dart:convert';
-import 'package:NewsApp/pages/account.dart';
+import 'package:NewsCards/pages/account.dart';
+import 'package:NewsCards/services/Article.dart';
+import 'package:NewsCards/services/dict.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart' as urlLauncher;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
+import 'package:vibration/vibration.dart';
 
 class Entertainment extends StatefulWidget {
   @override
@@ -19,14 +24,40 @@ class _EntertainmentState extends State<Entertainment> {
   // List typed data that stores the news got from api
   Map data;
   List news;
+  String uid;
+
+  String dp;
+
+  _getDp() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      dp = _prefs.getString('dpid');
+      uid = _prefs.getString('uid');
+    });
+  }
 
   // Async fun to get the data from url and decode the json response
   Future get() async {
     await http.get(apiurl).then((res) {
       data = json.decode(res.body);
+      _getDp();
       setState(() {
         news = data["articles"];
       });
+    });
+  }
+
+  _saveToFav(_newsData) {
+    Firestore _db = Firestore.instance;
+    var data = {
+      'newstitle': _newsData['title'].toString().substring(0, 20) + '..',
+      'newsimg': _newsData['urlToImage'],
+      'newsurl': _newsData['url']
+    };
+    _db.collection(uid).add(data).then((res) {
+      Toast.show('Article added to Favorites', context,
+          duration: Toast.LENGTH_LONG);
+      Vibration.vibrate(duration: 200);
     });
   }
 
@@ -108,7 +139,7 @@ class _EntertainmentState extends State<Entertainment> {
                         borderRadius: BorderRadius.circular(50),
                         child: Image(
                           image: AssetImage(
-                            "./assets/doggoavatar.png",
+                            dp == 'cat' ? dpDict[1] : dpDict[0],
                           ),
                         ),
                       )),
@@ -180,11 +211,23 @@ class _EntertainmentState extends State<Entertainment> {
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                            onPressed: () => urlLauncher
-                                                .launch(news[index]["url"]),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  CupertinoPageRoute(
+                                                      builder: (context) =>
+                                                          InappBrowserpage(
+                                                            newsurl: news[index]
+                                                                ['url'],
+                                                          )));
+                                            },
                                           ),
                                         ),
                                         Spacer(flex: 2),
+                                        IconButton(
+                                            icon: Icon(Icons.favorite),
+                                            onPressed: () =>
+                                                _saveToFav(news[index])),
                                         IconButton(
                                             icon: Icon(Icons.share),
                                             onPressed: () => Share.share(

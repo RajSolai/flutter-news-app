@@ -1,4 +1,3 @@
-import 'package:NewsApp/pages/register.dart';
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,6 +50,34 @@ class _LoginState extends State<Login> {
     });
   }
 
+  void _forgetPass(_email) async {
+    if (_email == null) {
+      Toast.show("Enter an email id to reset the password 🙄", context,
+          duration: Toast.LENGTH_LONG);
+    } else {
+      await _fireauth.sendPasswordResetEmail(email: _email).then((res) {
+        Toast.show("Check your Mail inbox to reset the password 💥", context,
+            duration: Toast.LENGTH_LONG);
+      }).catchError((err) {
+        if (err.message == "The email address is badly formatted.") {
+          Toast.show("Please Type in the correct Email id 😕", context,
+              duration: Toast.LENGTH_LONG);
+        } else if (err.message ==
+            "There is no user record corresponding to this identifier. The user may have been deleted.") {
+          Toast.show("Oppsie , No User found for given Email id 😅", context,
+              duration: Toast.LENGTH_LONG);
+        } else if (err.message == "Given String is empty or null") {
+          Toast.show("Enter an email id to reset the password 🙄", context,
+              duration: Toast.LENGTH_LONG);
+        } else {
+          Toast.show("Cant Reach Servers 😴", context,
+              gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
+        }
+        print(err.message);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,7 +107,6 @@ class _LoginState extends State<Login> {
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextField(
-                              autofocus: true,
                               decoration: InputDecoration(
                                   hintText: "example : username@domain.com"),
                               onChanged: (value) {
@@ -99,6 +125,7 @@ class _LoginState extends State<Login> {
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextField(
+                              obscureText: true,
                               decoration: InputDecoration(
                                   hintText:
                                       "must contain atleast 6 characters"),
@@ -124,16 +151,17 @@ class _LoginState extends State<Login> {
                         color: Colors.pinkAccent[200],
                         child: Text("Create new Account"),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                  builder: (context) => Register()));
+                          Navigator.pushReplacementNamed(context, "/register");
                         }),
                     SizedBox(
                       height: 20,
                     ),
                     CupertinoButton(
-                        child: Text("Forgot password ?"), onPressed: null)
+                      child: Text("Forgot password ?"),
+                      onPressed: () {
+                        _forgetPass(emailid);
+                      },
+                    )
                   ],
                 ))));
   }
