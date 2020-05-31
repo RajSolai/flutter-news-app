@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:toast/toast.dart';
+import 'package:vibration/vibration.dart';
 
 class Fav extends StatefulWidget {
   @override
@@ -30,39 +31,43 @@ class _FavState extends State<Fav> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-            child: Column(
-      children: <Widget>[
-        SizedBox(
-          height: 40,
-        ),
-        Container(
-          child: Row(
-            children: <Widget>[
-              SizedBox(
-                width: 10,
-              ),
-              IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-              SizedBox(
-                width: 10,
-              ),
-              Container(
-                child: Text(
-                  'Favorites 💕',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
-              )
-            ],
+      body: Container(
+          child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 40,
           ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Expanded(
+          Container(
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  width: 10,
+                ),
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  child: Text(
+                    'Favorites 💕',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            'TIP: Double Tap to delete favorite',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+          Expanded(
             child: StreamBuilder<QuerySnapshot>(
                 stream: Firestore.instance.collection(uid).snapshots(),
                 builder: (BuildContext context,
@@ -118,9 +123,11 @@ class _FavState extends State<Fav> {
                                         newsurl: document['newsurl'],
                                       ))),
                           onDoubleTap: () {
-                            Toast.show('Removed From Favorites', context,
-                                duration: Toast.LENGTH_LONG);
-                            document.reference.delete();
+                            document.reference.delete().then((value) {
+                              Vibration.vibrate(duration: 45);
+                              Toast.show('Removed From Favorites', context,
+                                  duration: Toast.LENGTH_LONG);
+                            });
                           },
                           child: Card(
                             shape: RoundedRectangleBorder(
@@ -133,9 +140,8 @@ class _FavState extends State<Fav> {
                                   width: 100,
                                   padding: EdgeInsets.all(10),
                                   child: CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(document['newsimg']),
-                                  ),
+                                      backgroundImage:
+                                          NetworkImage(document['newsimg'])),
                                 ),
                                 SizedBox(
                                   width: 10,
@@ -160,8 +166,10 @@ class _FavState extends State<Fav> {
                       }).toList(),
                     );
                   }
-                }))
-      ],
-    )));
+                }),
+          ),
+        ],
+      )),
+    );
   }
 }

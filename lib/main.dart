@@ -7,7 +7,7 @@ import 'pages/register.dart';
 import 'home.dart';
 
 main() {
-  Admob.initialize('ca-app-pub-7461368310551653~7736962283');
+  Admob.initialize('ca-app-pub-3940256099942544~3347511713');
   runApp(App());
 }
 

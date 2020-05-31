@@ -27,7 +27,6 @@ class _LiveState extends State<Live> {
   String uid;
   String dp;
 
-  
   _getDp() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -81,9 +80,9 @@ class _LiveState extends State<Live> {
       'newsurl': _newsData['url']
     };
     _db.collection(uid).add(data).then((res) {
+      Vibration.vibrate(duration: 50);
       Toast.show('Article added to Favorites', context,
           duration: Toast.LENGTH_LONG);
-      Vibration.vibrate(duration: 200);
     });
   }
 
@@ -130,22 +129,24 @@ class _LiveState extends State<Live> {
                     height: 40,
                     width: 40,
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => Account()));
-                      },
-                      child: CircleAvatar(
-                          child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image(
-                          image: AssetImage(
-                            (dp == 'cat') ? dpDict[1] : dpDict[0],
-                          ),
-                        ),
-                      )),
-                    )),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                  builder: (context) => Account()));
+                        },
+                        child: Tooltip(
+                          message: 'Access account and Favorites',
+                          child: CircleAvatar(
+                              child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image(
+                              image: AssetImage(
+                                (dp == 'cat') ? dpDict[1] : dpDict[0],
+                              ),
+                            ),
+                          )),
+                        ))),
                 SizedBox(
                   width: 5,
                 ),

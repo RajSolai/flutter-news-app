@@ -158,9 +158,12 @@ class _AccountState extends State<Account> {
                       color: Colors.pink,
                       child: Text("Sign Out"),
                       onPressed: () => _signOut()),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Container(
                     child: AdmobBanner(
-                        adUnitId: 'ca-app-pub-7461368310551653/8304966164',
+                        adUnitId: 'ca-app-pub-3940256099942544/6300978111',
                         adSize: AdmobBannerSize.BANNER),
                   )
                 ],

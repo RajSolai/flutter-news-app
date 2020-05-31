@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Live",
+    "url": "http://newsapi.org/v2/top-headlines?country=in&apiKey=b0404985f10f4304bfea8b247262c9b4"
+  },
+  {
+    "name": "Tech",
+    "url": "http://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=b0404985f10f4304bfea8b247262c9b4"
+  },
+  {
+    "name": "Entertainment",
+    "url": "http://newsapi.org/v2/top-headlines?country=in&category=entertainment&apiKey=b0404985f10f4304bfea8b247262c9b4"
+  },
+  {
+    "name": "Health-Science",
+    "url": "http://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=b0404985f10f4304bfea8b247262c9b4"
+  }
+]
