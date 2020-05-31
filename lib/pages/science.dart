@@ -49,6 +49,7 @@ class _ScienceState extends State<Science> {
     get();
   }
 
+// build
   @override
   Widget build(BuildContext context) {
     if (news == null) {
