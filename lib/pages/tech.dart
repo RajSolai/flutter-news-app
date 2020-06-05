@@ -61,8 +61,8 @@ class _TechState extends State<Tech> {
         child: Column(
           children: <Widget>[
             CustomAppBar(
-              title: "Entertainment",
-              emoji: "🍿",
+              title: "Tech",
+              emoji: "👩🏻‍💻",
               dp: this.dp,
             ),
             Container(

@@ -5,6 +5,7 @@ import 'package:share/share.dart';
 import 'package:toast/toast.dart';
 import 'package:vibration/vibration.dart';
 import 'package:NewsCards/services/Article.dart';
+import 'package:flare_flutter/flare_actor.dart';
 
 class NewsCard extends StatefulWidget {
   final title, imgurl, content, uid, url;
@@ -15,6 +16,8 @@ class NewsCard extends StatefulWidget {
 }
 
 class _NewsCardState extends State<NewsCard> {
+  // states for animation
+  String animationState = "none";
   // handling no image input
   String noImg(input) {
     if (input == null) {
@@ -41,6 +44,9 @@ class _NewsCardState extends State<NewsCard> {
       'newsurl': url
     };
     _db.collection(uid).add(data).then((res) {
+      setState(() {
+        animationState = "color";
+      });
       Vibration.vibrate(duration: 50);
       Toast.show('Article added to Favorites', context,
           duration: Toast.LENGTH_LONG);
@@ -107,13 +113,28 @@ class _NewsCardState extends State<NewsCard> {
                       ),
                     ),
                     Spacer(flex: 2),
-                    IconButton(
+                    GestureDetector(
+                      onTap: () => _saveToFav(this.widget.title,
+                          this.widget.imgurl, this.widget.uid, this.widget.url),
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        child: FlareActor(
+                          "./assets/animations/Favorite-icon.flr",
+                          fit: BoxFit.contain,
+                          alignment: Alignment.center,
+                          animation: animationState,
+                        ),
+                      ),
+                    ),
+
+                    /* IconButton(
                         icon: Icon(Icons.favorite),
                         onPressed: () => _saveToFav(
                             this.widget.title,
                             this.widget.imgurl,
                             this.widget.uid,
-                            this.widget.url)),
+                            this.widget.url)) */
                     IconButton(
                       icon: Icon(Icons.share),
                       onPressed: () => Share.share(this.widget.url),

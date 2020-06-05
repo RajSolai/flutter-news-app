@@ -38,6 +38,7 @@ dependencies:
   cloud_firestore:
   admob_flutter:
   cached_network_image:
+  flare_flutter:
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +66,7 @@ flutter:
     - ./assets/avatar/cat-icon.png
     - ./assets/icons/no-connection-logo.png
     - ./assets/icons/loading-logo.png
+    - ./assets/animations/Favorite-icon.flr
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
@@ -75,16 +77,16 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-      - family: HelveticaNowText
-        fonts:
-          - asset: ./assets/fonts/HelveticaNowText-Bold.otf
-          - asset: ./assets/fonts/HelveticaNowText-Regular.otf
-            weight: 700
-      -  family: VisueltPro
-         fonts:
-          - asset: ./assets/fonts/VisueltPro-Bold.ttf
-          - asset: ./assets/fonts/VisueltPro-Regular.ttf
-            weight: 700
+    - family: HelveticaNowText
+      fonts:
+        - asset: ./assets/fonts/HelveticaNowText-Bold.otf
+        - asset: ./assets/fonts/HelveticaNowText-Regular.otf
+          weight: 700
+    - family: VisueltPro
+      fonts:
+        - asset: ./assets/fonts/VisueltPro-Bold.ttf
+        - asset: ./assets/fonts/VisueltPro-Regular.ttf
+          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
