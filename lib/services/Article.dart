@@ -42,6 +42,7 @@ class _InappBrowserpageState extends State<InappBrowserpage> {
                   width: 10,
                 ),
                 Container(
+                  padding: EdgeInsets.all(10),
                   child: Text(
                     'Article 📖',
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),

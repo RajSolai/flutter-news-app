@@ -21,7 +21,7 @@ class _NewsCardState extends State<NewsCard> {
   // handling no image input
   String noImg(input) {
     if (input == null) {
-      return 'https://kinsta.com/wp-content/uploads/2018/02/wordpress-photo-gallery-plugins.png';
+      return 'https://firebasestorage.googleapis.com/v0/b/flutter-fire-a6262.appspot.com/o/noimg.png?alt=media&token=53379f9a-b08e-43e0-b42c-c336145e4ccf';
     } else {
       return input;
     }
@@ -127,14 +127,6 @@ class _NewsCardState extends State<NewsCard> {
                         ),
                       ),
                     ),
-
-                    /* IconButton(
-                        icon: Icon(Icons.favorite),
-                        onPressed: () => _saveToFav(
-                            this.widget.title,
-                            this.widget.imgurl,
-                            this.widget.uid,
-                            this.widget.url)) */
                     IconButton(
                       icon: Icon(Icons.share),
                       onPressed: () => Share.share(this.widget.url),

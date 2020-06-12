@@ -61,7 +61,7 @@ class _EntertainmentState extends State<Entertainment> {
         child: Column(
           children: <Widget>[
             CustomAppBar(
-              title: "Entertainment",
+              title: "Movies",
               emoji: "🍿",
               dp: this.dp,
             ),
