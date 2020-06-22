@@ -24,6 +24,48 @@ class _RegisterState extends State<Register> {
     _prefs.setString(key, data);
   }
 
+  void _emailVerificationAlert() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Email not Verified !😕"),
+            content: Text(
+                "Hey, It seems Your EmailId is not verified. Please Verify your EmailID for further features like adding Favorites and Reseting Password"),
+            actions: <Widget>[
+              CupertinoButton(
+                  child: Text("Okay,I'll do it 👍"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              CupertinoButton(
+                  child: Text("Nah 😑"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  })
+            ],
+          );
+        });
+  }
+
+  void _loginAlerts(String title, String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: <Widget>[
+              CupertinoButton(
+                  child: Text("Okay 👍"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          );
+        });
+  }
+
   _updateDp(String _dppref) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setString('dpid', _dppref);
@@ -34,7 +76,7 @@ class _RegisterState extends State<Register> {
       setState(() {
         _gender = 'Male';
       });
-    }else{
+    } else {
       _gender = 'Female';
     }
   }
@@ -61,6 +103,9 @@ class _RegisterState extends State<Register> {
       print(error.message);
     }).then((res) {
       // user update info
+      res.user.sendEmailVerification().then((value) {
+        _emailVerificationAlert();
+      });
       UserUpdateInfo info = new UserUpdateInfo();
       info.displayName = displayname;
       Firestore _db = Firestore.instance;
@@ -68,16 +113,14 @@ class _RegisterState extends State<Register> {
       _setdata("uid", res.user.uid);
       _setdata("username", displayname);
       var data = {
-        'name' : displayName,
-        'email' : emailid,
-        'gender' : _gender,
-        'dp' : dp
+        'name': displayName,
+        'email': emailid,
+        'gender': _gender,
+        'dp': dp
       };
       _db.collection('AlluserDetails').document(email).setData(data);
-      Toast.show("Cheers 🍷, your account is created", context,
-          gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
-      print("user created with email and password");
-      Navigator.of(context).pushReplacementNamed("/home");
+      _loginAlerts("Cheers 🍷", "your account is created, Now you can Login");
+      Navigator.of(context).pushReplacementNamed("/login");
     });
   }
 

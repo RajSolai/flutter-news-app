@@ -160,7 +160,7 @@ class _AccountState extends State<Account> {
                   SizedBox(
                     height: 30,
                   ),
-                 /*  Container(
+                  /*  Container(
                     child: AdmobBanner(
                         adUnitId: 'ca-app-pub-3940256099942544/6300978111',
                         adSize: AdmobBannerSize.BANNER),

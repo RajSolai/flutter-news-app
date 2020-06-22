@@ -20,33 +20,72 @@ class _LoginState extends State<Login> {
     _prefs.setString(key, data);
   }
 
+  void _emailVerificationAlert() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Email not Verified !😕"),
+            content: Text(
+                "Hey, It seems Your EmailId is not verified. Please Verify your EmailID and Login again"),
+            actions: <Widget>[
+              CupertinoButton(
+                  child: Text("Okay,I'll do it 👍"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          );
+        });
+  }
+
+  void _loginAlerts(String title, String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: <Widget>[
+              CupertinoButton(
+                  child: Text("Okay 👍"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          );
+        });
+  }
+
   void _login(email, pass) async {
     await _fireauth
         .signInWithEmailAndPassword(email: email, password: pass)
         .catchError((error) {
       if (error.message ==
           "The password is invalid or the user does not have a password.") {
-        Toast.show("Password Incorrect , Try Again 😑", context,
-            gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
+        _loginAlerts(
+            "Password Incorrect 😑", "Password Incorrect , Try Again ");
       } else if (error.message == "The email address is badly formatted.") {
-        Toast.show("Please Type in the correct Email id 😕", context,
-            gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
+        _loginAlerts("Bad Email ID 😕", "Please Type in the correct Email id ");
       } else if (error.message ==
           "There is no user record corresponding to this identifier. The user may have been deleted.") {
-        Toast.show("Oppsie , No User found for given Email id 😅", context,
-            gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
+        _loginAlerts("No User Found 😅",
+            "Oppsie , No User found for given Email id. Please Create a Account ");
       } else {
         Toast.show("Cant Reach Servers 😴", context,
             gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
       }
       print(error.message);
     }).then((res) {
-      _setdata("uid", res.user.uid);
-      _setdata("username", res.user.displayName);
-      Toast.show("Cheers 🍷, login sucessful", context,
-          gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
-      print("user created with email and password");
-      Navigator.of(context).pushReplacementNamed("/home");
+      if (res.user.isEmailVerified) {
+        _setdata("uid", res.user.uid);
+        _setdata("username", res.user.displayName);
+        Toast.show("Cheers 🍷, login sucessful", context,
+            gravity: Toast.BOTTOM, duration: Toast.LENGTH_LONG);
+        Navigator.of(context).pushReplacementNamed("/home");
+      } else {
+        _emailVerificationAlert();
+      }
     });
   }
 

@@ -23,7 +23,7 @@ class _LiveState extends State<Live> {
   String uid;
   String dp;
 
-  _getDp() async {
+  void _getDp() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
       dp = _prefs.getString('dpid');
@@ -32,7 +32,7 @@ class _LiveState extends State<Live> {
   }
 
   // Async fun to get the data from url and decode the json response
-  Future get() async {
+  Future<void> get() async {
     await http.get(apiurl).then((res) {
       data = json.decode(res.body);
       _getDp();
